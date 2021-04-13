@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../dist/vue.js"></script>
+  <script>
+     Vue.component('comp', {
+      name: 'comp',
+      props: {
+        key: String,
+        key2: {
+          required: true,
+          default: {}
+        },
+        key3: () => [1,2,3]
+      },
+      inject: ['count'],
+      template: '<div><child @child-click="childClick"></child></div>',
+      components: {
+        child: {
+          name: 'child',
+          template: '<div>i am {{name}}</div>',
+          created() {
+            console.log('child created')
+          },
+          mounted() {
+            console.log('child mounted')
+          },
+          data(){
+            return {
+              name: 'child',
+              comObj: {
+                childObjName: 'childObjName'
+              }
+            }
+          }
+        }
+      },
+      created() {
+        console.log('comp create')
+      },
+      mounted() {
+        console.log('comp mounted')
+      },
+      data() {
+        return {
+          name: 'fhh',
+          comObj: {
+            comObjName: 'comObjName'
+          }
+        }
+      },
+      methods: {
+        childClick() {
+          console.log('childClick')
+        }
+      }
+    })
+    const app = new Vue({
+      el: '#app',
+      template: `
+        <div id="app">
+          <h1 @click="countClick">
+            count:{{count}}
+          </h1>
+          <div>
+            <p>
+              <comp>
+              </comp>
+            </p>
+          </div>
+        </div>
+        `,
+      provide() {
+        return {
+          count: this.count
+        }
+      },
+      created() {
+        console.log('comp create')
+      },
+      mounted() {
+        console.log('comp mounted')
+      },
+      data(){
+        return {
+          count: 0,
+          appName: 'vue',
+          arr: ['1', '2', {name: 'fff'}, [1,2]],
+          appObj: {
+            appObjName: 'app vue'
+          }
+        }
+      },
+      mounted() {
+        console.log(this.arr)
+      },
+      methods: {
+        countClick() {
+          console.log('countClick')
+        }
+      }
+    })
+  </script>
+</body>
+</html>
