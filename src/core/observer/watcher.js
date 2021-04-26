@@ -169,6 +169,7 @@ export default class Watcher {
     if (this.lazy) {
       this.dirty = true
     } else if (this.sync) {
+      // 同步执行
       this.run()
     } else {
       // 入队
@@ -196,6 +197,7 @@ export default class Watcher {
         // set new value
         const oldValue = this.value
         this.value = value
+        // this.user 表示是用户手动调用的watcher，如组件的computed、watch
         if (this.user) {
           try {
             this.cb.call(this.vm, value, oldValue)

@@ -69,6 +69,7 @@ if (inBrowser && !isIE) {
  * Flush both queues and run the watchers.
  */
 function flushSchedulerQueue () {
+  console.log('flushSchedulerQueue')
   currentFlushTimestamp = getNow()
   flushing = true
   let watcher, id
@@ -81,14 +82,15 @@ function flushSchedulerQueue () {
   //    user watchers are created before the render watcher)
   // 3. If a component is destroyed during a parent component's watcher run,
   //    its watchers can be skipped.
+  // 排序 根据id 从小到大 排
   queue.sort((a, b) => a.id - b.id)
-
   // do not cache length because more watchers might be pushed
   // as we run existing watchers
-  debugger
+  
   for (index = 0; index < queue.length; index++) {
     // 每次拿出一个watcher
     watcher = queue[index]
+    // 执行watcher的before 组件在new Watcher 传入的before即执行vm的beforeUpdate生命周期 渲染watcher
     if (watcher.before) {
       watcher.before()
     }
@@ -129,7 +131,7 @@ function flushSchedulerQueue () {
     devtools.emit('flush')
   }
 }
-
+// 遍历执行queue里 每个watcher 对应的组件 的updated
 function callUpdatedHooks (queue) {
   let i = queue.length
   while (i--) {
@@ -164,11 +166,13 @@ function callActivatedHooks (queue) {
  * Jobs with duplicate IDs will be skipped unless it's
  * pushed when the queue is being flushed.
  */
+// 将watcher 推入queue，并进行去重
+// 将 flushSchedulerQueue 推入nextTick callbacks中
 export function queueWatcher (watcher: Watcher) {
   // 去重
   const id = watcher.id
-  // 不存在才入队
-  debugger
+  // queue: [watcher1, ...] 存的是watcher列表
+  // 不存在才push进queue中
   if (has[id] == null) {
     has[id] = true
     if (!flushing) {
@@ -185,12 +189,10 @@ export function queueWatcher (watcher: Watcher) {
     // queue the flush
     if (!waiting) {
       waiting = true
-
-      if (process.env.NODE_ENV !== 'production' && !config.async) {
-        debugger
-        flushSchedulerQueue()
-        return
-      }
+      // if (process.env.NODE_ENV !== 'production' && !config.async) {
+      //   flushSchedulerQueue()
+      //   return
+      // }
       // 异步执行flushSchedulerQueue
       nextTick(flushSchedulerQueue)
     }

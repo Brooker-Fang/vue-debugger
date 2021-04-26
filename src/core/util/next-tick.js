@@ -13,11 +13,13 @@ let pending = false
 
 // 刷新回调函数数组
 function flushCallbacks () {
+  console.log('callbacks===', callbacks)
   pending = false
   const copies = callbacks.slice(0)
   callbacks.length = 0
   // 遍历并执行
   for (let i = 0; i < copies.length; i++) {
+    console.log(i)
     copies[i]()
   }
 }
@@ -92,6 +94,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
   callbacks.push(() => {
     if (cb) {
+      // 对用户传入的回调函数  做捕获异常的处理
       try {
         cb.call(ctx)
       } catch (e) {

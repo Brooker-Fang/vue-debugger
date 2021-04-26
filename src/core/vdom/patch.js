@@ -538,9 +538,10 @@ export function createPatchFunction (backend) {
       vnode.componentInstance = oldVnode.componentInstance
       return
     }
-
+    // 
     let i
     const data = vnode.data
+    // 如果当前节点是 组件节点，执行prepatch 组件的钩子函数（在src\core\vdom\create-component.js中定义）
     if (isDef(data) && isDef(i = data.hook) && isDef(i = i.prepatch)) {
       i(oldVnode, vnode)
     }

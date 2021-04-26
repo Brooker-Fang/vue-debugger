@@ -34,6 +34,8 @@ import {
 
 // inline hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
+  // 如果组件已经实例化过，执行prepatch
+  // 否则执行组件的实例化，并执行$mounted
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
     if (
       vnode.componentInstance &&
@@ -55,6 +57,7 @@ const componentVNodeHooks = {
   prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
     const options = vnode.componentOptions
     const child = vnode.componentInstance = oldVnode.componentInstance
+    // 更新组件的属性 和事件
     updateChildComponent(
       child,
       options.propsData, // updated props
@@ -63,7 +66,7 @@ const componentVNodeHooks = {
       options.children // new children
     )
   },
-
+  // 标记组件已经挂载，执行mounted生命周期
   insert (vnode: MountedComponentVNode) {
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
