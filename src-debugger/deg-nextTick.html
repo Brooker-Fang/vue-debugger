@@ -77,17 +77,17 @@
             // })
             // 此时微任务队列 [flushCallbacks, p1] 即 [[...callbacks], p1]
             // flushCallbacks 即 callbacks
-            this.$nextTick(() => {
-              this.count = 3
+            this.$nextTick(() => { // 进入callbacks
+              this.count = 3 // 
               console.log("cb1 count:", this.$refs.count.innerHTML); // count: 2
             });
             Promise.resolve().then(() => {
               console.log("p1 count：", this.$refs.count.innerHTML); // 进入微任务队列
             });
-            this.count = 1;
+            this.count = 1; // 进入queue，flushSchedulerQueue 进入 callbacks
             this.count = 2;
             this.$nextTick(() => {
-              console.log("cb2 count:", this.$refs.count.innerHTML); // count: 2
+              console.log("cb2 count:", this.$refs.count.innerHTML); // count: 2  cb2  进入 callbacks
             });
           },
         },

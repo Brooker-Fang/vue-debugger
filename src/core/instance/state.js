@@ -51,6 +51,7 @@ export function initState (vm: Component) {
   if (opts.props) initProps(vm, opts.props)
   if (opts.methods) initMethods(vm, opts.methods)
   if (opts.data) {
+    // 做响应式处理
     initData(vm)
   } else {
     observe(vm._data = {}, true /* asRootData */)
@@ -184,7 +185,6 @@ function initComputed (vm: Component, computed: Object) {
         vm
       )
     }
-
     if (!isSSR) {
       // create internal watcher for the computed property.
       watchers[key] = new Watcher(
@@ -217,6 +217,7 @@ export function defineComputed (
 ) {
   const shouldCache = !isServerRendering()
   if (typeof userDef === 'function') {
+    // 处理缓存
     sharedPropertyDefinition.get = shouldCache
       ? createComputedGetter(key)
       : createGetterInvoker(userDef)

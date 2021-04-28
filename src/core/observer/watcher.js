@@ -44,10 +44,10 @@ export default class Watcher {
 
   constructor (
     vm: Component,
-    expOrFn: string | Function,
-    cb: Function,
+    expOrFn: string | Function, // 属性 或者 函数
+    cb: Function, // 回调函数
     options?: ?Object,
-    isRenderWatcher?: boolean
+    isRenderWatcher?: boolean // 是否是渲染watcher
   ) {
     this.vm = vm
     if (isRenderWatcher) {
@@ -67,7 +67,7 @@ export default class Watcher {
     this.cb = cb
     this.id = ++uid // uid for batching
     this.active = true
-    this.dirty = this.lazy // for lazy watchers
+    this.dirty = this.lazy // for lazy watchers computed的lazy为true
     this.deps = []
     this.newDeps = []
     this.depIds = new Set()
@@ -166,6 +166,7 @@ export default class Watcher {
   update () {
     /* istanbul ignore else */
     // computed
+    
     if (this.lazy) {
       this.dirty = true
     } else if (this.sync) {
@@ -197,7 +198,7 @@ export default class Watcher {
         // set new value
         const oldValue = this.value
         this.value = value
-        // this.user 表示是用户手动调用的watcher，如组件的computed、watch
+        // this.user 表示是用户手动调用的watcher，如组件的computed、watch, 需要加 捕获异常
         if (this.user) {
           try {
             this.cb.call(this.vm, value, oldValue)

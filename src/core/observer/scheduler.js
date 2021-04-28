@@ -186,6 +186,7 @@ export function queueWatcher (watcher: Watcher) {
       }
       queue.splice(i + 1, 0, watcher)
     }
+    console.log('queue===', queue)
     // queue the flush
     if (!waiting) {
       waiting = true
