@@ -246,9 +246,13 @@ function createComputedGetter (key) {
   return function computedGetter () {
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
+      // 如果 dirty为true
       if (watcher.dirty) {
+        // 重新获取computed 属性的值
+        // 并将dirty 重新设置为 false
         watcher.evaluate()
       }
+      // dirty是false，不需要重新获取值
       if (Dep.target) {
         watcher.depend()
       }

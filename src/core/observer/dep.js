@@ -27,7 +27,7 @@ export default class Dep {
   removeSub (sub: Watcher) {
     remove(this.subs, sub)
   }
-
+  // 
   depend () {
     if (Dep.target) {
       Dep.target.addDep(this)
