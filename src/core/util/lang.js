@@ -35,6 +35,7 @@ export function parsePath (path: string): any {
   if (bailRE.test(path)) {
     return
   }
+  // 'obj.obj.name' 处理这种形式的属性
   const segments = path.split('.')
   return function (obj) {
     for (let i = 0; i < segments.length; i++) {

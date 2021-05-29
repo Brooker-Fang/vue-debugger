@@ -170,6 +170,7 @@ export function defineReactive (
     configurable: true,
     get: function reactiveGetter () {
       // 依赖收集
+      console.log(key)
       const value = getter ? getter.call(obj) : val
       // Dep.target就是Watcher实例
       if (Dep.target) {

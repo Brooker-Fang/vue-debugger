@@ -314,6 +314,18 @@ function createWatcher (
   handler: any,
   options?: Object
 ) {
+  // watch有三种形式：对象、方法、字符串
+  /*  如：
+    watch： {
+      count: {
+        handler: (newVal, oldVal) {},
+        deep: true,
+        immediate: true
+      },
+      'key'(n) {},
+      'key': 'method'
+    } 
+  */
   if (isPlainObject(handler)) {
     options = handler
     handler = handler.handler

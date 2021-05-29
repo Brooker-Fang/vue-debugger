@@ -15,6 +15,7 @@
         template: `
         <div ref="count" id="count" @click="countClick">
           count: {{count}}
+          key: {{key}}
           keyValue: {{keyValue}}
         </div>
        `,
@@ -22,19 +23,42 @@
           return {
             count: 0,
             key: "1",
+            objWatch: {
+              name: 'obj'
+            }
           };
         },
         computed: {
           keyValue () {
-            console.log('keyValue')
             return this.count + this.key
-          }
+          },
+          // name: {
+          //   set(val) {
+          //     this.name = val
+          //   },
+          //   get() {
+          //     return this.name + 'h'
+          //   }
+          // }
         },
         methods: {
           countClick() {
             this.count += 1
           },
         },
+        watch: {
+          'count' (n) {
+            console.log('new count===', n)
+          },
+          'objWatch.name' (n) {
+            console.log('new objWatch.name===', n)
+          },
+          // keyValue: {
+          //   handler(n) {
+          //     console.log('new name====', n)
+          //   }
+          // }
+        }
       });
       console.log(vm._watchers);
       console.log(vm);

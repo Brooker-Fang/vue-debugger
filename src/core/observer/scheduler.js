@@ -84,9 +84,9 @@ function flushSchedulerQueue () {
   //    its watchers can be skipped.
   // 排序 根据id 从小到大 排
   queue.sort((a, b) => a.id - b.id)
+  debugger
   // do not cache length because more watchers might be pushed
   // as we run existing watchers
-  
   for (index = 0; index < queue.length; index++) {
     // 每次拿出一个watcher
     watcher = queue[index]

@@ -44,12 +44,14 @@ export default class Watcher {
 
   constructor (
     vm: Component,
-    expOrFn: string | Function, // 属性 或者 函数
-    cb: Function, // 回调函数
+    expOrFn: string | Function, // 回调函数
+    cb: Function, 
     options?: ?Object,
     isRenderWatcher?: boolean // 是否是渲染watcher
   ) {
+    
     this.vm = vm
+    // console.log('cb===', cb, options)
     if (isRenderWatcher) {
       vm._watcher = this
     }
@@ -75,10 +77,13 @@ export default class Watcher {
     this.expression = process.env.NODE_ENV !== 'production'
       ? expOrFn.toString()
       : ''
+      
     // parse expression for getter
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn
     } else {
+      // parsePath会通过属性名 去组件获取
+      // 如expOrFn = 'obj.name'， getter时传入vm，最后获取vm.obj.name
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
         this.getter = noop
@@ -103,6 +108,7 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
+      debugger
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
