@@ -6,6 +6,7 @@ import { createCompileToFunctionFn } from './to-function'
 
 export function createCompilerCreator (baseCompile: Function): Function {
   return function createCompiler (baseOptions: CompilerOptions) {
+    // 将平台相关的配置 和 用户传入的配置选项 进行合并
     function compile (
       template: string,
       options?: CompilerOptions
@@ -17,7 +18,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
       let warn = (msg, range, tip) => {
         (tip ? tips : errors).push(msg)
       }
-
+      // 将平台相关的配置 和 用户传入的配置选项 进行合并
       if (options) {
         if (process.env.NODE_ENV !== 'production' && options.outputSourceRange) {
           // $flow-disable-line
@@ -57,7 +58,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
       }
 
       finalOptions.warn = warn
-
+      // 把模板字符串 编译为 对象
       const compiled = baseCompile(template.trim(), finalOptions)
       if (process.env.NODE_ENV !== 'production') {
         detectErrors(compiled.ast, warn)
@@ -69,7 +70,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
 
     return {
       compile,
-      compileToFunctions: createCompileToFunctionFn(compile)
+      compileToFunctions: createCompileToFunctionFn(compile) // 编译的入口函数
     }
   }
 }

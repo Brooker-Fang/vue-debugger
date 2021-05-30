@@ -12,10 +12,13 @@ export const createCompiler = createCompilerCreator(function baseCompile (
   template: string,
   options: CompilerOptions
 ): CompiledResult {
+  // 把模板 转为 ast抽象语法树，即用树形的方式描述代码结构
   const ast = parse(template.trim(), options)
+  // 优化 抽象语法树
   if (options.optimize !== false) {
     optimize(ast, options)
   }
+  // 将抽象语法树 生成 字符串形式的 js代码
   const code = generate(ast, options)
   return {
     ast,

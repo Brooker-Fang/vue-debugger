@@ -19,6 +19,7 @@ function createFunction (code, errors) {
 }
 
 export function createCompileToFunctionFn (compile: Function): Function {
+  // 缓存编译结果
   const cache = Object.create(null)
 
   return function compileToFunctions (
@@ -49,6 +50,9 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // check cache
+    /* 
+       读取cache缓存，有的话直接返回
+     */
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
@@ -57,6 +61,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // compile
+    // 把模板编译为 编译对象
     const compiled = compile(template, options)
 
     // check compilation errors/tips
@@ -90,7 +95,9 @@ export function createCompileToFunctionFn (compile: Function): Function {
     // turn code into functions
     const res = {}
     const fnGenErrors = []
+    // 把字符串形式的js代码 转换为 js函数
     res.render = createFunction(compiled.render, fnGenErrors)
+    // 静态
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)
     })
@@ -108,7 +115,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
         )
       }
     }
-
+    // 把编译结果缓存到cache 并返回
     return (cache[key] = res)
   }
 }

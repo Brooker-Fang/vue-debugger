@@ -30,8 +30,10 @@ export class CodegenState {
     const isReservedTag = options.isReservedTag || no
     this.maybeComponent = (el: ASTElement) => !!el.component || !isReservedTag(el.tag)
     this.onceId = 0
+    // 模板中可能有多个静态根节点，所以用数组保存
     this.staticRenderFns = []
-    this.pre = false
+    this.pre = false // 当前节点是否v-pre标记
+    // v-pre标记的节点 以及其子节点都是静态节点
   }
 }
 
