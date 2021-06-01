@@ -58,7 +58,7 @@ export function genElement (el: ASTElement, state: CodegenState): string {
   if (el.parent) {
     el.pre = el.pre || el.parent.pre
   }
-
+  // el.staticRoot 表示是静态根节点， staticProcessed表示是否进行过编译
   if (el.staticRoot && !el.staticProcessed) {
     return genStatic(el, state)
   } else if (el.once && !el.onceProcessed) {
@@ -109,6 +109,11 @@ function genStatic (el: ASTElement, state: CodegenState): string {
   }
   state.staticRenderFns.push(`with(this){return ${genElement(el, state)}}`)
   state.pre = originalPreState
+  console.log('genStatic===', `_m(${
+    state.staticRenderFns.length - 1
+  }${
+    el.staticInFor ? ',true' : ''
+  })`)
   return `_m(${
     state.staticRenderFns.length - 1
   }${
@@ -122,6 +127,9 @@ function genOnce (el: ASTElement, state: CodegenState): string {
   if (el.if && !el.ifProcessed) {
     return genIf(el, state)
   } else if (el.staticInFor) {
+    /* 
+      todo: 想不出是啥情景...
+    */
     let key = ''
     let parent = el.parent
     while (parent) {
@@ -138,8 +146,10 @@ function genOnce (el: ASTElement, state: CodegenState): string {
       )
       return genElement(el, state)
     }
+    console.log('once')
     return `_o(${genElement(el, state)},${state.onceId++},${key})`
   } else {
+    // v-once 一般走这
     return genStatic(el, state)
   }
 }
@@ -166,6 +176,11 @@ function genIfConditions (
 
   const condition = conditions.shift()
   if (condition.exp) {
+    console.log('genIf===',`(${condition.exp})?${
+      genTernaryExp(condition.block)
+    }:${
+      genIfConditions(conditions, state, altGen, altEmpty)
+    }`)
     return `(${condition.exp})?${
       genTernaryExp(condition.block)
     }:${
@@ -212,6 +227,10 @@ export function genFor (
   }
 
   el.forProcessed = true // avoid recursion
+  console.log('genFor===',`${altHelper || '_l'}((${exp}),` +
+  `function(${alias}${iterator1}${iterator2}){` +
+    `return ${(altGen || genElement)(el, state)}` +
+  '})')
   return `${altHelper || '_l'}((${exp}),` +
     `function(${alias}${iterator1}${iterator2}){` +
       `return ${(altGen || genElement)(el, state)}` +
@@ -305,6 +324,7 @@ export function genData (el: ASTElement, state: CodegenState): string {
   if (el.wrapListeners) {
     data = el.wrapListeners(data)
   }
+  console.log('getData', data)
   return data
 }
 

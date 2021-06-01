@@ -507,6 +507,7 @@ export function createPatchFunction (backend) {
     removeOnly
   ) {
     if (oldVnode === vnode) {
+      // 静态根节点 新旧节点相同，跳过patch
       return
     }
 

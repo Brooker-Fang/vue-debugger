@@ -39,11 +39,14 @@ function genStaticKeys (keys: string): Function {
 
 function markStatic (node: ASTNode) {
   node.static = isStatic(node)
+  /* 
+    node.type说明：1是标签节点，2是表达式，3是文本节点
+  */
   if (node.type === 1) {
     // do not make component slot content static. this avoids
     // 1. components not able to mutate slot nodes
     // 2. static slot content fails for hot-reloading
-    // 不是保留标签的话，即是组件，则不将组件下的slot 标记为静态节点
+    // 不将组件下的slot 标记为静态节点
     if (
       !isPlatformReservedTag(node.tag) &&
       node.tag !== 'slot' &&

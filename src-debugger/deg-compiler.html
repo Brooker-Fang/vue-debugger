@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>静态<span>根节点</span></h1>
+      <!-- <span v-text="text"></span>
+      <comp></comp> -->
+      <span v-if="show">{{show}}</span>
+      <div v-once>v-once</div>
+      <button @click="showClick"> showBtn</button>
+      <ul >
+        <li v-for="i in list" v-once>{{i}}</li>
+      </ul>
+      
+    </div>
+    <script src="../dist/vue.js"></script>
+    <script>
+      Vue.component('comp', {
+        template: `<div>comp</div>`
+      })
+      let vm = new Vue({
+        el: "#app",
+        data() {
+          return {
+            text: 'text',
+            show: true,
+            list: [1,2,3,4]
+          };
+        },
+        methods: {
+          showClick() {
+            this.show = !this.show
+          },
+        },
+      });
+      console.log(vm.$options.render)
+      console.log(vm.$options)
+    </script>
+  </body>
+</html>

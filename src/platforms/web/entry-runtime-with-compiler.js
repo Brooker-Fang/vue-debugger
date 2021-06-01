@@ -75,7 +75,9 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
+      // 
       options.render = render
+      // staticRenderFns存的是 静态根节点的 render方法
       options.staticRenderFns = staticRenderFns
 
       /* istanbul ignore if */

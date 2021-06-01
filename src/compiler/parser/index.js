@@ -263,7 +263,7 @@ export function parse (
       for (let i = 0; i < preTransforms.length; i++) {
         element = preTransforms[i](element, options) || element
       }
-
+      // 处理v-pre指令
       if (!inVPre) {
         processPre(element)
         if (element.pre) {
@@ -277,7 +277,11 @@ export function parse (
         processRawAttrs(element)
       } else if (!element.processed) {
         // structural directives
-        processFor(element)
+        /* 
+          处理属性上的 指令 v-for\v-if\v-once
+        */
+        
+        processFor(element) 
         processIf(element)
         processOnce(element)
       }

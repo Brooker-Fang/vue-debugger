@@ -21,6 +21,7 @@ export function renderStatic (
     this // for render fns generated for functional component templates
   )
   markStatic(tree, `__static__${index}`, false)
+  console.log('tree===', tree)
   return tree
 }
 
@@ -34,6 +35,7 @@ export function markOnce (
   key: string
 ) {
   markStatic(tree, `__once__${index}${key ? `_${key}` : ``}`, true)
+  console.log('once===', tree)
   return tree
 }
 
