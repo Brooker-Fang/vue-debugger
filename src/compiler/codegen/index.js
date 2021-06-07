@@ -107,6 +107,7 @@ function genStatic (el: ASTElement, state: CodegenState): string {
   if (el.pre) {
     state.pre = el.pre
   }
+  // 同时存入 staticRenderFns数组方法中
   state.staticRenderFns.push(`with(this){return ${genElement(el, state)}}`)
   state.pre = originalPreState
   console.log('genStatic===', `_m(${
